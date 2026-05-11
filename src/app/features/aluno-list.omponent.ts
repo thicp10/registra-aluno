@@ -1,0 +1,1 @@
+export { AlunoListComponent } from './aluno-list.component';
