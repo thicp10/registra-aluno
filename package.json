@@ -1,13 +1,13 @@
 {
-  "name": "registra-aluno",
+  "name": "registra-marmita",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:registra-aluno": "node dist/registra-aluno/server/server.mjs"
+    "start": "ng serve --project registra-marmita",
+    "build": "ng build --project registra-marmita",
+    "watch": "ng build --watch --configuration development --project registra-marmita",
+    "test": "ng test --project registra-marmita",
+    "serve:ssr:registra-marmita": "node dist/registra-marmita/server/server.mjs"
   },
   "prettier": {
     "printWidth": 100,
@@ -32,8 +32,10 @@
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.8",
     "express": "^5.1.0",
+    "file-saver": "^2.0.5",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@angular/build": "^20.3.8",
