@@ -25,11 +25,7 @@
             "styles": [
               "registra-marmita/src/styles.css"
             ],
-            "server": "registra-marmita/src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "registra-marmita/src/server.ts"
-            }
+            "outputMode": "static"
           },
           "configurations": {
             "production": {

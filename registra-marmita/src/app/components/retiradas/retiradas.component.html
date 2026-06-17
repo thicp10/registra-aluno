@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="tabs">
+    <button [class.active]="activeTab === 'registrar'" (click)="setTab('registrar')">Registrar Retirada</button>
+    <button [class.active]="activeTab === 'lista'" (click)="setTab('lista')">Lista de Retiradas</button>
+    <button [class.active]="activeTab === 'moradores'" (click)="setTab('moradores')">Moradores de Rua</button>
+  </div>
+
+  @if (successMessage) {
+    <div class="alert alert-success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+  }
+
+  @if (activeTab === 'registrar') {
+    <div class="card">
+      <div class="card-header">
+        <h2>Registrar Retirada de Marmita</h2>
+      </div>
+
+      <div class="tipo-selector">
+        <label class="radio-label">
+          <input type="radio" name="tipo" value="codigo" [(ngModel)]="tipoRegistro" (change)="onTipoChange()" />
+          Por Código
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tipo" value="nome" [(ngModel)]="tipoRegistro" (change)="onTipoChange()" />
+          Por Nome
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tipo" value="rg" [(ngModel)]="tipoRegistro" (change)="onTipoChange()" />
+          Por RG
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tipo" value="moradorRua" [(ngModel)]="tipoRegistro" (change)="onTipoChange()" />
+          Morador de Rua
+        </label>
+      </div>
+
+      <form (ngSubmit)="registrarRetirada()">
+        @if (tipoRegistro === 'codigo') {
+          <div class="form-group">
+            <label for="codigo">Código do Cliente</label>
+            <input type="text" id="codigo" class="form-control" [(ngModel)]="formData.codigo" name="codigo" placeholder="Ex: 1" />
+          </div>
+        }
+
+        @if (tipoRegistro === 'nome' || tipoRegistro === 'moradorRua') {
+          <div class="form-group">
+            <label for="nome">{{ tipoRegistro === 'moradorRua' ? 'Nome do Morador de Rua' : 'Nome Completo do Cliente' }}</label>
+            <input type="text" id="nome" class="form-control" [(ngModel)]="formData.nome" name="nome" placeholder="Nome completo" />
+          </div>
+        }
+
+        @if (tipoRegistro === 'rg' || tipoRegistro === 'moradorRua') {
+          <div class="form-group">
+            <label for="rg">RG{{ tipoRegistro === 'moradorRua' ? ' (opcional)' : '' }}</label>
+            <input type="text" id="rg" class="form-control" [(ngModel)]="formData.rg" name="rg" placeholder="RG" />
+          </div>
+        }
+
+        @if (tipoRegistro === 'moradorRua') {
+          <div class="form-group">
+            <label for="descricao">Descrição (opcional)</label>
+            <textarea id="descricao" class="form-control" [(ngModel)]="formData.descricao" name="descricao" rows="3" placeholder="Observações sobre o morador"></textarea>
+          </div>
+        }
+
+        <button type="submit" class="btn btn-primary">Registrar Retirada</button>
+      </form>
+    </div>
+  }
+
+  @if (activeTab === 'lista') {
+    <div class="card">
+      <div class="card-header">
+        <h2>Retiradas Registradas</h2>
+        <div class="actions">
+          <button class="btn btn-success btn-sm" (click)="exportarExcel()">Exportar Excel</button>
+          <button class="btn btn-primary btn-sm" (click)="exportarRelatorioDiario()">Relatório Diário</button>
+        </div>
+      </div>
+
+      @if (loading) {
+        <div class="loading">Carregando retiradas...</div>
+      } @else {
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Código Cliente</th>
+                <th>Data/Hora Retirada</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (retirada of retiradas; track retirada.id) {
+                <tr>
+                  <td>{{ retirada.id }}</td>
+                  <td>{{ retirada.cliente.nome }}</td>
+                  <td>{{ retirada.cliente.id }}</td>
+                  <td>{{ retirada.dataRetirada | date:'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="text-center">Nenhuma retirada registrada</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  @if (activeTab === 'moradores') {
+    <div class="card">
+      <div class="card-header">
+        <h2>Moradores de Rua Atendidos</h2>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>RG</th>
+              <th>Descrição</th>
+              <th>Data Retirada</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (morador of moradoresRua; track morador.id) {
+              <tr>
+                <td>{{ morador.id }}</td>
+                <td>{{ morador.nome }}</td>
+                <td>{{ morador.rg || '-' }}</td>
+                <td>{{ morador.descricao || '-' }}</td>
+                <td>{{ morador.dataRetirada | date:'dd/MM/yyyy HH:mm' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="text-center">Nenhum morador de rua atendido</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
