@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { RetiradaService } from '../../services/retirada.service';
@@ -13,6 +13,7 @@ import { Retirada, MoradorRua, RetiradaRequest } from '../../models/retirada.mod
 })
 export class RetiradasComponent implements OnInit {
   private readonly retiradaService = inject(RetiradaService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   retiradas: Retirada[] = [];
   moradoresRua: MoradorRua[] = [];
@@ -36,10 +37,12 @@ export class RetiradasComponent implements OnInit {
       next: (retiradas) => {
         this.retiradas = retiradas;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Erro ao carregar retiradas';
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -48,6 +51,7 @@ export class RetiradasComponent implements OnInit {
     this.retiradaService.listarMoradoresRua().subscribe({
       next: (moradores) => {
         this.moradoresRua = moradores;
+        this.cdr.markForCheck();
       },
       error: () => {},
     });
@@ -96,11 +100,13 @@ export class RetiradasComponent implements OnInit {
       next: (response) => {
         this.successMessage = response.mensagem || 'Retirada registrada com sucesso!';
         this.formData = {};
+        this.cdr.markForCheck();
         this.loadRetiradas();
         this.loadMoradoresRua();
       },
       error: (err) => {
         this.errorMessage = err.error?.erro || 'Erro ao registrar retirada';
+        this.cdr.markForCheck();
       },
     });
   }
@@ -117,6 +123,7 @@ export class RetiradasComponent implements OnInit {
       },
       error: () => {
         this.errorMessage = 'Erro ao exportar Excel';
+        this.cdr.markForCheck();
       },
     });
   }
@@ -133,6 +140,7 @@ export class RetiradasComponent implements OnInit {
       },
       error: () => {
         this.errorMessage = 'Erro ao exportar relatório diário';
+        this.cdr.markForCheck();
       },
     });
   }

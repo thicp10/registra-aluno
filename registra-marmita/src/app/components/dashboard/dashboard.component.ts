@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClienteService } from '../../services/cliente.service';
 import { RetiradaService } from '../../services/retirada.service';
@@ -14,6 +14,7 @@ import { RelatorioDiario } from '../../models/retirada.model';
 export class DashboardComponent implements OnInit {
   private readonly clienteService = inject(ClienteService);
   private readonly retiradaService = inject(RetiradaService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   totalClientes = 0;
   totalReceberam = 0;
@@ -31,17 +32,26 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
 
     this.clienteService.getTotal().subscribe({
-      next: (total) => (this.totalClientes = total),
+      next: (total) => {
+        this.totalClientes = total;
+        this.cdr.markForCheck();
+      },
       error: () => {},
     });
 
     this.clienteService.getReceberam().subscribe({
-      next: (total) => (this.totalReceberam = total),
+      next: (total) => {
+        this.totalReceberam = total;
+        this.cdr.markForCheck();
+      },
       error: () => {},
     });
 
     this.clienteService.getNaoReceberam().subscribe({
-      next: (total) => (this.totalNaoReceberam = total),
+      next: (total) => {
+        this.totalNaoReceberam = total;
+        this.cdr.markForCheck();
+      },
       error: () => {},
     });
 
@@ -49,6 +59,7 @@ export class DashboardComponent implements OnInit {
       next: (stats) => {
         this.totalRetiradas = stats.total_retiradas;
         this.totalMoradoresRua = stats.total_moradores_rua;
+        this.cdr.markForCheck();
       },
       error: () => {},
     });
@@ -57,9 +68,11 @@ export class DashboardComponent implements OnInit {
       next: (relatorio) => {
         this.relatorioDiario = relatorio;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ClienteService } from '../../services/cliente.service';
@@ -13,6 +13,7 @@ import { Cliente } from '../../models/cliente.model';
 })
 export class ClientesComponent implements OnInit {
   private readonly clienteService = inject(ClienteService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   clientes: Cliente[] = [];
   loading = true;
@@ -42,10 +43,12 @@ export class ClientesComponent implements OnInit {
       next: (clientes) => {
         this.clientes = clientes;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Erro ao carregar clientes';
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -60,10 +63,12 @@ export class ClientesComponent implements OnInit {
       next: (clientes) => {
         this.clientes = clientes;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorMessage = 'Erro na busca';
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -92,6 +97,7 @@ export class ClientesComponent implements OnInit {
   saveCliente(): void {
     if (!this.formData.nome || !this.formData.endereco || !this.formData.data) {
       this.errorMessage = 'Preencha os campos obrigatórios (Nome, Endereço, Data)';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -102,10 +108,12 @@ export class ClientesComponent implements OnInit {
         next: () => {
           this.successMessage = 'Cliente atualizado com sucesso!';
           this.showForm = false;
+          this.cdr.markForCheck();
           this.loadClientes();
         },
         error: (err) => {
           this.errorMessage = err.error?.message || err.error || 'Erro ao atualizar cliente';
+          this.cdr.markForCheck();
         },
       });
     } else {
@@ -113,10 +121,12 @@ export class ClientesComponent implements OnInit {
         next: () => {
           this.successMessage = 'Cliente criado com sucesso!';
           this.showForm = false;
+          this.cdr.markForCheck();
           this.loadClientes();
         },
         error: (err) => {
           this.errorMessage = err.error?.message || err.error || 'Erro ao criar cliente';
+          this.cdr.markForCheck();
         },
       });
     }
@@ -130,10 +140,12 @@ export class ClientesComponent implements OnInit {
     this.clienteService.delete(id).subscribe({
       next: () => {
         this.successMessage = 'Cliente excluído com sucesso!';
+        this.cdr.markForCheck();
         this.loadClientes();
       },
       error: () => {
         this.errorMessage = 'Erro ao excluir cliente';
+        this.cdr.markForCheck();
       },
     });
   }
@@ -150,6 +162,7 @@ export class ClientesComponent implements OnInit {
       },
       error: () => {
         this.errorMessage = 'Erro ao exportar Excel';
+        this.cdr.markForCheck();
       },
     });
   }

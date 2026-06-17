@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   username = '';
   password = '';
@@ -39,6 +40,7 @@ export class LoginComponent {
         } else {
           this.errorMessage = 'Erro ao conectar com o servidor';
         }
+        this.cdr.markForCheck();
       },
     });
   }
