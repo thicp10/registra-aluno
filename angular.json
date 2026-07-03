@@ -41,7 +41,13 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "registra-marmita/src/environments/environment.ts",
+                  "with": "registra-marmita/src/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
