@@ -1,3 +1,15 @@
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+}
+
 .page-title {
   font-size: 24px;
   color: #333;
