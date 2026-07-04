@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd registra-marmita && npm install && npx ng build --configuration=production",
-  "outputDirectory": "registra-marmita/dist/registra-marmita/browser",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist/registra-marmita/browser",
   "framework": null,
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
