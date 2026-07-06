@@ -41,6 +41,13 @@ export interface RelatorioDiario {
   total_geral: number;
 }
 
+export interface ProducaoDiaria {
+  data: string;
+  quantidade_produzida: number;
+  total_entregue: number;
+  saldo_restante: number;
+}
+
 export interface LoginRequest {
   username: string;
   password: string;

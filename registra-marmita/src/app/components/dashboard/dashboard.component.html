@@ -5,6 +5,57 @@
 
   <h2 class="page-title">Dashboard</h2>
 
+  <div class="card producao-card">
+    <div class="card-header">
+      <h2>Marmitas do Dia</h2>
+    </div>
+
+    @if (producao) {
+      <div class="producao-stats">
+        <div class="producao-stat">
+          <div class="producao-value">{{ producao.quantidade_produzida }}</div>
+          <div class="producao-label">Feitas</div>
+        </div>
+        <div class="producao-stat">
+          <div class="producao-value delivered">{{ producao.total_entregue }}</div>
+          <div class="producao-label">Entregues</div>
+        </div>
+        <div class="producao-stat">
+          <div
+            class="producao-value"
+            [class.available]="producao.saldo_restante > 0"
+            [class.empty]="producao.saldo_restante <= 0"
+          >
+            {{ producao.saldo_restante }}
+          </div>
+          <div class="producao-label">Restantes</div>
+        </div>
+      </div>
+    }
+
+    <div class="producao-form">
+      <label for="quantidade">Quantas marmitas foram feitas hoje?</label>
+      <div class="producao-input-row">
+        <input
+          id="quantidade"
+          type="number"
+          min="0"
+          [(ngModel)]="quantidadeInput"
+          placeholder="Ex: 250"
+        />
+        <button type="button" (click)="salvarProducao()" [disabled]="savingProducao">
+          {{ savingProducao ? 'Salvando...' : 'Salvar' }}
+        </button>
+      </div>
+      @if (producaoMensagem) {
+        <p class="producao-msg success">{{ producaoMensagem }}</p>
+      }
+      @if (producaoErro) {
+        <p class="producao-msg error">{{ producaoErro }}</p>
+      }
+    </div>
+  </div>
+
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-value">{{ totalClientes }}</div>
