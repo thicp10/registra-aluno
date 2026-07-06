@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="logo-section">
+    <img src="logo.png" alt="Associação Projeto Juninho" class="logo" />
+  </div>
+
+  <h2 class="page-title">Dashboard</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">{{ totalClientes }}</div>
+      <div class="stat-label">Total de Clientes</div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-value">{{ totalReceberam }}</div>
+      <div class="stat-label">Receberam Marmita</div>
+    </div>
+    <div class="stat-card danger">
+      <div class="stat-value">{{ totalNaoReceberam }}</div>
+      <div class="stat-label">Não Receberam</div>
+    </div>
+    <div class="stat-card info">
+      <div class="stat-value">{{ totalRetiradas }}</div>
+      <div class="stat-label">Total de Retiradas</div>
+    </div>
+    <div class="stat-card warning">
+      <div class="stat-value">{{ totalMoradoresRua }}</div>
+      <div class="stat-label">Moradores de Rua Atendidos</div>
+    </div>
+  </div>
+
+  @if (relatorioDiario) {
+    <div class="card">
+      <div class="card-header">
+        <h2>Relatório do Dia - {{ relatorioDiario.data }}</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ relatorioDiario.total_clientes }}</div>
+          <div class="stat-label">Clientes Hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ relatorioDiario.total_moradores_rua }}</div>
+          <div class="stat-label">Moradores de Rua Hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ relatorioDiario.total_geral }}</div>
+          <div class="stat-label">Total Geral Hoje</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="quick-actions">
+    <h3>Ações Rápidas</h3>
+    <div class="actions-grid">
+      <a routerLink="/clientes" class="action-card">
+        <span class="action-icon">+</span>
+        <span>Gerenciar Clientes</span>
+      </a>
+      <a routerLink="/retiradas" class="action-card">
+        <span class="action-icon">R</span>
+        <span>Registrar Retirada</span>
+      </a>
+    </div>
+  </div>
+</div>

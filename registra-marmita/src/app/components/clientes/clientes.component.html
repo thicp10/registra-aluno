@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Gerenciar Clientes</h2>
+      <div class="actions">
+        <button class="btn btn-success btn-sm" (click)="exportExcel()">Exportar Excel</button>
+        <button class="btn btn-primary" (click)="openCreateForm()">+ Novo Cliente</button>
+      </div>
+    </div>
+
+    @if (successMessage) {
+      <div class="alert alert-success">{{ successMessage }}</div>
+    }
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+
+    <div class="search-bar">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por nome..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="search()"
+      />
+      <button class="btn btn-primary btn-sm" (click)="search()">Buscar</button>
+      @if (searchTerm) {
+        <button class="btn btn-secondary btn-sm" (click)="searchTerm = ''; loadClientes()">Limpar</button>
+      }
+    </div>
+
+    @if (loading) {
+      <div class="loading">Carregando clientes...</div>
+    } @else {
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Endereço</th>
+              <th>RG</th>
+              <th>Data</th>
+              <th>Recebeu</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cliente of clientes; track cliente.id) {
+              <tr>
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.endereco }}</td>
+                <td>{{ cliente.rg || '-' }}</td>
+                <td>{{ cliente.data }}</td>
+                <td>
+                  <span [class]="cliente.recebeu ? 'badge badge-success' : 'badge badge-danger'">
+                    {{ cliente.recebeu ? 'Sim' : 'Não' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="actions">
+                    <button class="btn btn-warning btn-sm" (click)="openEditForm(cliente)">Editar</button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteCliente(cliente.id)">Excluir</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center">Nenhum cliente encontrado</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showForm) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editing ? 'Editar Cliente' : 'Novo Cliente' }}</h3>
+        <button class="modal-close" (click)="closeForm()">&times;</button>
+      </div>
+
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+      }
+
+      <form (ngSubmit)="saveCliente()">
+        <div class="form-group">
+          <label for="nome">Nome *</label>
+          <input type="text" id="nome" class="form-control" [(ngModel)]="formData.nome" name="nome" required />
+        </div>
+
+        <div class="form-group">
+          <label for="endereco">Endereço *</label>
+          <input type="text" id="endereco" class="form-control" [(ngModel)]="formData.endereco" name="endereco" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rg">RG</label>
+            <input type="text" id="rg" class="form-control" [(ngModel)]="formData.rg" name="rg" />
+          </div>
+          <div class="form-group">
+            <label for="data">Data *</label>
+            <input type="date" id="data" class="form-control" [(ngModel)]="formData.data" name="data" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.recebeu" name="recebeu" />
+            Recebeu marmita
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">{{ editing ? 'Atualizar' : 'Salvar' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,55 @@
+.navbar {
+  background: #1976d2;
+  color: white;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 4px;
+}
+
+.navbar-menu a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.navbar-menu a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.navbar-menu a.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+main {
+  min-height: calc(100vh - 60px);
+}
